@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,9 +32,10 @@ public class MainActivity extends AppCompatActivity {
         button3 = (Button)findViewById(R.id.button3);
         button4 = (Button)findViewById(R.id.button4);
         Insert();
-        select();
+        //selectAll();
         update();
         delete();
+        selectDescription();
     }
 
 
@@ -44,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v){
                         boolean inserted = testdb.insertData(
                                 editText.getText().toString(),
-                                editText2.getText().toString()
+                                editText2.getText().toString(),
+                                "beschrijving van het gebouw"
                         );
                         if (inserted == true){
                             Toast.makeText(MainActivity.this,"data inserted",Toast.LENGTH_LONG).show();
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    public void select(){
+    public void selectAll(){
         button2.setOnClickListener(
                 new View.OnClickListener(){
                     @Override
@@ -69,8 +72,32 @@ public class MainActivity extends AppCompatActivity {
                         StringBuffer buffer = new StringBuffer();
                         while (res.moveToNext()){
                             buffer.append("id :"+ res.getString(0)+"\n");
-                            buffer.append("col2 :"+ res.getString(1)+"\n");
-                            buffer.append("col3 :"+ res.getString(2)+"\n");
+                            buffer.append("longitude :"+ res.getString(1)+"\n");
+                            buffer.append("latitude :"+ res.getString(2)+"\n");
+                            buffer.append("description : "+ res.getString(3)+"\n");
+                        }
+                        showMessage("data",buffer.toString());
+                    }
+                }
+        );
+    }
+
+    public void selectDescription(){
+        button2.setOnClickListener(
+                new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        String idGebouw = editText3.getText().toString();
+                        Log.d("myTag", idGebouw);
+                        Cursor res = testdb.getDataById(idGebouw);
+                        if (res.getCount() ==0){
+                            showMessage("error","no data found");
+                            return;
+                        }
+                        StringBuffer buffer = new StringBuffer();
+                        while (res.moveToNext()){
+                            buffer.append("id :"+ res.getString(0)+"\n");
+                            buffer.append("description :"+ res.getString(3)+"\n");
                         }
                         showMessage("data",buffer.toString());
                     }
@@ -79,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public  void    showMessage ( String title , String message){
+    public void showMessage ( String title , String message){
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
         alertBuilder.setCancelable(true);
         alertBuilder.setTitle(title);
@@ -95,7 +122,9 @@ public class MainActivity extends AppCompatActivity {
                         boolean updated = testdb.update(
                                 editText3.getText().toString(),
                                 editText.getText().toString(),
+                                editText2.getText().toString(),
                                 editText2.getText().toString()
+
                         );
                         if (updated == true){
                             Toast.makeText(MainActivity.this,"data updated",Toast.LENGTH_LONG).show();
@@ -115,9 +144,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         int deleted = testdb.delete(editText3.getText().toString());
                         if (deleted <0){
-                            Toast.makeText(MainActivity.this,"data  deleted",Toast.LENGTH_LONG).show();
-                        }else  {
                             Toast.makeText(MainActivity.this,"data not deleted",Toast.LENGTH_LONG).show();
+                        }else  {
+                            Toast.makeText(MainActivity.this,"data deleted",Toast.LENGTH_LONG).show();
                         }
                     }
                 }
