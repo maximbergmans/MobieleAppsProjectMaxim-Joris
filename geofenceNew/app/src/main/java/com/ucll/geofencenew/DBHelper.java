@@ -38,6 +38,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         insertOnStart(db,"50.937216", "5.417169", "testplaats1");
         insertOnStart(db,"50.937216", "5.417169", "testplaats2");
+        insertOnStart(db,"50.774656", "5.442534", "testplaats3");
     }
 
     @Override
