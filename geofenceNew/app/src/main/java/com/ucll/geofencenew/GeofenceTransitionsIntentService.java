@@ -38,9 +38,6 @@ import com.google.android.gms.location.GeofencingEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
 /**
  * Listener for geofence transition changes.
  *
@@ -51,6 +48,9 @@ import java.util.List;
 public class GeofenceTransitionsIntentService extends IntentService {
 
     protected static final String TAG = "GeofenceTransitionsIS";
+
+
+    public static boolean firstUse = true;
 
     /**
      * This constructor is required, and calls the super IntentService(String)
@@ -84,20 +84,12 @@ public class GeofenceTransitionsIntentService extends IntentService {
         // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
-
-        //geofence exit testen of dit wel werkt nope werkt niet
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-            //MainActivity main = new MainActivity();
-            //main.reset();
-
-            //((MainActivity)getActivity()).reset();
-
-        }
-
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
                 geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
 
+            //bool op false zetten zodat geofencen niet gereset worden
+            firstUse = false;
 
             // Get the geofences that were triggered. A single event can trigger multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
@@ -108,6 +100,16 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     geofenceTransition,
                     triggeringGeofences
             );
+
+            //geofence exit testen of dit wel werkt nope werkt niet
+            if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+                //MainActivity main = new MainActivity();
+                //main.reset();
+
+                //((MainActivity)getActivity()).reset();
+                firstUse = true;
+            }
+
 
             // Send notification and log the transition details.
             sendNotification(geofenceTransitionDetails);
@@ -149,8 +151,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
      */
     private void sendNotification(String notificationDetails) {
 
-
-
         // Create an explicit content Intent that starts the main Activity.
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
 
@@ -171,20 +171,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
         // Define the notification settings.
-
-        /* eigen melding
-        builder.setSmallIcon(R.drawable.ic_launcher)
-                // In a real app, you may want to use a library like Volley
-                // to decode the Bitmap.
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(),
-                        R.drawable.ic_launcher))
-                .setColor(Color.RED)
-                .setContentTitle(notificationDetails)
-                .setContentText(getString(R.string.geofence_transition_notification_text))
-                .setContentIntent(notificationPendingIntent)
-                .setFullScreenIntent()
-        ;*/
-
         builder.setSmallIcon(R.drawable.ic_launcher)
                 // In a real app, you may want to use a library like Volley
                 // to decode the Bitmap.

@@ -11,13 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-import android.database.sqlite.SQLiteOpenHelper;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-
 /**
  * Created by Joris on 13/01/2017.
  */
@@ -42,14 +35,6 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE "+TABLE_NAME + " (ID INTEGER  PRIMARY KEY AUTOINCREMENT, longitude TEXT, latitude TEXT, description TEXT)" );
-
-/*
-        ContentValues cv = new ContentValues();
-        cv.put(COL_2 ,"50.937178");
-        cv.put(COL_3 ,"5.417290");
-        cv.put(COL_4 ,"testplaats1222 ");
-        long result =db.insert(TABLE_NAME,null,cv);
-*/
 
         insertOnStart(db,"50.937216", "5.417169", "testplaats1");
         insertOnStart(db,"50.937216", "5.417169", "testplaats2");

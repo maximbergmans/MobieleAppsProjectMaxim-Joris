@@ -6,10 +6,6 @@ package com.ucll.geofencenew;
 
 
 
-        import com.google.android.gms.maps.model.LatLng;
-
-        import java.util.HashMap;
-
 /**
  * Constants used in this sample.
  */
@@ -37,18 +33,5 @@ public final class Constants {
             GEOFENCE_EXPIRATION_IN_HOURS * 60 * 60 * 1000;
     public static final float GEOFENCE_RADIUS_IN_METERS = 100; // 1 mile, 1.6 km  //kleiner dan 100 m geeft problemen
 
-    /**
-     * Map for storing information about airports in the San Francisco bay area.
-     *//*
-    public static final HashMap<String, LatLng> BAY_AREA_LANDMARKS = new HashMap<String, LatLng>();
-    static {
-        // San Francisco International Airport.
-        BAY_AREA_LANDMARKS.put("SFO", new LatLng(37.621313, -122.378955));
 
-        // Googleplex.
-        BAY_AREA_LANDMARKS.put("GOOGLE", new LatLng(37.422611,-122.0840577));
-
-        // school ingang.50.928741, 5.394922 kot 50.937216, 5.394958  50.937178, 5.417290
-        BAY_AREA_LANDMARKS.put("school ingang", new LatLng(50.937178, 5.417290));
-    }*/
 }

@@ -4,12 +4,8 @@ package com.ucll.geofencenew;
  * Created by Joris on 13/01/2017.
  */
 
-
-
 import android.content.Context;
 import android.content.res.Resources;
-
-
 import com.google.android.gms.location.GeofenceStatusCodes;
 
 /**

@@ -8,23 +8,20 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-
-
-        import com.google.android.gms.common.ConnectionResult;
-        import com.google.android.gms.common.api.GoogleApiClient;
-        import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-        import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-        import com.google.android.gms.common.api.ResultCallback;
-        import com.google.android.gms.common.api.Status;
-        import com.google.android.gms.location.Geofence;
-        import com.google.android.gms.location.GeofencingRequest;
-        import com.google.android.gms.location.LocationServices;
-        import com.google.android.gms.location.GeofencingApi;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.GeofencingApi;
 
 /**
  * Demonstrates how to create and remove geofences using the GeofencingApi. Uses an IntentService
@@ -103,13 +100,6 @@ public class MainActivity extends ActionBarActivity implements
 
         // Kick off the request to build GoogleApiClient.
         buildGoogleApiClient();
-
-
-        //testen
-
-        //reset();
-
-
     }
 
     //sqlite
@@ -148,19 +138,6 @@ public class MainActivity extends ActionBarActivity implements
         mGoogleApiClient.disconnect();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-
-    @Override
-    protected void onRestart()
-    {
-
-        super.onRestart();
-    }
-
     /**
      * Runs when a GoogleApiClient object successfully connects.
      */
@@ -168,14 +145,11 @@ public class MainActivity extends ActionBarActivity implements
     public void onConnected(Bundle connectionHint) {
         Log.i(TAG, "Connected to GoogleApiClient");
 
-
+        if (GeofenceTransitionsIntentService.firstUse) {
             reset();
-
-
-
+            GeofenceTransitionsIntentService.firstUse = false;
+        }
     }
-
-
 
 
     @Override
@@ -205,47 +179,12 @@ public class MainActivity extends ActionBarActivity implements
         // is already inside that geofence.
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
 
-
-
         // Add the geofences to be monitored by geofencing service.
         builder.addGeofences(mGeofenceList);
 
         // Return a GeofencingRequest.
         return builder.build();
     }
-
-    /**
-     * Adds geofences, which sets alerts to be notified when the device enters or exits one of the
-     * specified geofences. Handles the success or failure results returned by addGeofences().
-     */
-    /*
-    public void addGeofencesButtonHandler(View view) {
-        Log.i(TAG, "knop ingedrukt?");
-        if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        try {
-            LocationServices.GeofencingApi.addGeofences(
-                    mGoogleApiClient,
-                    // The GeofenceRequest object.
-                    getGeofencingRequest(),
-                    // A pending intent that that is reused when calling removeGeofences(). This
-                    // pending intent is used to generate an intent when a matched geofence
-                    // transition is observed.
-                    getGeofencePendingIntent()
-            ).setResultCallback(this); // Result processed in onResult().
-        } catch (SecurityException securityException) {
-            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
-            logSecurityException(securityException);
-        }
-    }
-*/
-
-
-
-
 
     /*autostart
 
@@ -276,31 +215,6 @@ public class MainActivity extends ActionBarActivity implements
                 }
 
     }
-
-
-
-
-    /**
-     * Removes geofences, which stops further notifications when the device enters or exits
-     * previously registered geofences.
-     *//*
-    public void removeGeofencesButtonHandler(View view) {
-        if (!mGoogleApiClient.isConnected()) {
-            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            // Remove geofences.
-            LocationServices.GeofencingApi.removeGeofences(
-                    mGoogleApiClient,
-                    // This is the same pending intent that was used in addGeofences().
-                    getGeofencePendingIntent()
-            ).setResultCallback(this); // Result processed in onResult().
-        } catch (SecurityException securityException) {
-            // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
-            logSecurityException(securityException);
-        }
-    }*/
 
     private void logSecurityException(SecurityException securityException) {
         Log.e(TAG, "Invalid location permission. " +
@@ -360,17 +274,6 @@ public class MainActivity extends ActionBarActivity implements
         // addGeofences() and removeGeofences().
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
-/* mislukte test
-    private PendingIntent getGeofencePendingIntent() {
-
-        Intent intent = new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-        int flag = PendingIntent.FLAG_UPDATE_CURRENT;
-        PendingIntent pendinginent = PendingIntent.getActivity(this,0,intent , flag);
-
-       return pendinginent;
-    }
-*/
     /**
      * This sample gets geofence data from sqlite database.
      */
@@ -410,6 +313,4 @@ public class MainActivity extends ActionBarActivity implements
         }
         Log.i(TAG, "geofences added");
     }
-
-
 }
